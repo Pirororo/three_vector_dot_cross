@@ -1,30 +1,28 @@
 import * as THREE from '../libs/three.module.js';
-
 /**
  * メインアプリクラスです。
  */
 
-export class App {
-  /**
+export class App{
+    /**
    * @constructor
    * @param sceneInstance
    */
-  constructor(sceneInstance) {
-    this._update = this._update.bind(this);
-    this._resize = this._resize.bind(this);
+  constructor(sceneInstance){
+    this._update = this._update.bind(this);//？
+    this._resize = this._resize.bind(this);//？
 
     // DOM
-    this._wrapper = document.getElementById('app');
+    this._wrapper = document.getElementById('app');//あれ？#いらない？canvasじゃなくてdivタグにかいてるのはなぜ？
 
     // シーン
     this._scene = sceneInstance;
 
-
-    // レンダラー
-    this._renderer = new THREE.WebGLRenderer({ antialias: false });
+    //レンダラー
+    this._renderer = new THREE.WebGLRenderer({ antialias: false });//？
     this._renderer.setClearColor(0x000000);
     this._renderer.setPixelRatio(1);
-    this._wrapper.appendChild(this._renderer.domElement);
+    this._wrapper.appendChild(this._renderer.domElement);//'app'のタグ内にレンダラーのdomElementを追加する
 
     // リサイズ
     this._resize();
@@ -32,11 +30,9 @@ export class App {
 
     // フレーム毎の更新
     this._update();
+
   }
 
-  /**
-   * フレーム毎の更新です。
-   */
   _update() {
     requestAnimationFrame(this._update);
     // シーンの更新
@@ -58,4 +54,5 @@ export class App {
     this._scene.camera.aspect = width / height;
     this._scene.camera.updateProjectionMatrix();
   }
+
 }
