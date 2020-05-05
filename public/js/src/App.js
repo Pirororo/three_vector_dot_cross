@@ -3,6 +3,7 @@ import * as THREE from '../libs/three.module.js';
 /**
  * メインアプリクラスです。
  */
+
 export class App {
   /**
    * @constructor
