@@ -4,6 +4,7 @@ import * as THREE from '../libs/three.module.js';
  */
 
 export class App{
+//  export default class App{
     /**
    * @constructor
    * @param sceneInstance
