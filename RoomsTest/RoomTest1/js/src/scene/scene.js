@@ -3,7 +3,6 @@ import Camera from '../camera/camera.js';
 import Rail from '../objects/rail.js';
 import Car from '../objects/car.js';
 
-
 /**
  * ステップ２シーンクラスです。
  */
@@ -12,8 +11,10 @@ export default class Scene extends THREE.Scene {
     constructor(){
 
         super();
+
         this._frame = 0;//frame
 
+  
     //   // 床
     //   const gridHelper = new THREE.GridHelper(50, 30);
     //   gridHelper.position.y = -10;
@@ -74,10 +75,10 @@ export default class Scene extends THREE.Scene {
         this._car.lookAt(this._rail._points[this._frame + 1]);
 
 
-        // // _pointsではなくpointsのままのもの
-        // const curentPoint = this._rail.points[this._frame];
+        //_pointsではなくpointsのままのもの
+        // const currentPoint = this._rail.points[this._frame];
         // const nextPoint = this._rail.points[this._frame +1];
-        // const normal = this._getNormal(curentPoint,nextPoint);
+        // const normal = this._getNormal(currentPoint,nextPoint);
 
         // this._car.position.copy(this._rail.points[this._frame]);
         // this._car.up.set(normal.x, normal.y, normal.z);
@@ -93,6 +94,5 @@ export default class Scene extends THREE.Scene {
                     .cross(new THREE.Vector3(0,0,-1));
         return NormalVec;
     }
-
 
 }
