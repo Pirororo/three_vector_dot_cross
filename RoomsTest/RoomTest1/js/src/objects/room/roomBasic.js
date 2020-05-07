@@ -1,14 +1,9 @@
-import * as THREE from '../../libs/three.module.js';
+import * as THREE from '../../../libs/three.module.js';
 
 /**
  *　レールクラスです。
  */
-export default class Rail extends THREE.Object3D {
-
-    // /** 頂点情報 */
-    // get points() {
-    //     return this._points;
-    // }
+export default class RoomBasic extends THREE.Object3D {
 
 
     // /**
@@ -39,9 +34,8 @@ export default class Rail extends THREE.Object3D {
       //   this._points.push(new THREE.Vector3(x,y,z));
       // }
 
-      // const material = new THREE.LineBasicMaterial({
       const material = new THREE.LineBasicMaterial({
-        color: 0xffff00,
+        color: 0xff0000,
       });
       const geometry = new THREE.Geometry();
       geometry.vertices = this._points;
@@ -49,9 +43,9 @@ export default class Rail extends THREE.Object3D {
       const line = new THREE.Line(geometry, material);
       this.add(line);//忘れずにかく
 
-    // もしくはこっち
-      // this.line = new THREE.Line(geometry, material);
-      // this.add(this.line);//これ要る
+    //もしくはこっち
+    //   this.line = new THREE.Line(geometry, material);
+    //   this.add(this.line);//これ要る
 
     }
   

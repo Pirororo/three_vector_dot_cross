@@ -23,8 +23,8 @@ export default class Scene extends THREE.Scene {
 
         //camera
         this.camera = new Camera();//thisにすること！！！最終的にはgame2.jsでsceneにaddする
-        this.camera.position.y = 10;
         this.camera.position.x = 10;
+        this.camera.position.y = 80;
         this.camera.position.z = 30;
 
 
@@ -48,6 +48,11 @@ export default class Scene extends THREE.Scene {
         // this._car.position.copy(this._rail.points[0]);//これのときはget points()関数の定義が必要
         this._car.position.copy(this._rail._points[0]);
         this.add(this._car);
+
+        //車2
+        this._car2 = new Car();
+        this._car2.position.set(0,0,0);
+        this.add(this._car2);
 
 
     }

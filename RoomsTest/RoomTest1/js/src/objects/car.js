@@ -12,14 +12,14 @@ export default class Car extends THREE.Object3D {
       super();
   
       // 本体
-      const body = new THREE.Mesh(
+      this.body = new THREE.Mesh(
         new THREE.BoxGeometry(3, 3, 6),
         new THREE.MeshPhongMaterial({
           color: 0xcccccc,
         })
       );
-      body.position.y = 3;
-      this.add(body);
+      this.body.position.y = 3;
+      this.add(this.body);
   
       // 車輪１
       const wheel1 = new THREE.Mesh(

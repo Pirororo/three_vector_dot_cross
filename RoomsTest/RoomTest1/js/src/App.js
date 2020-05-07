@@ -19,7 +19,6 @@ export class App{
     this._wrapper = document.getElementById('app');//あれ？#いらない？canvasじゃなくてdivタグにかいてるのはなぜ？
 
     // マウス座標管理用のベクトルを作成
-    // const mouse = new THREE.Vector2();
     this.mouse = new THREE.Vector2();
     
     // シーン
@@ -35,37 +34,56 @@ export class App{
     this._resize();
     window.addEventListener('resize', this._resize);
 
-    // マウスとの交差を調べたいものは配列に格納する
-    const geometry = new THREE.BoxBufferGeometry(50, 50, 50);
-    // const meshList = [];
+
+    ////カラーチェンジ：[box] 成功。
+    // // マウスとの交差を調べたいものは配列に格納する
+    // const floorsize = 10;
+    // const geometry = new THREE.BoxBufferGeometry(floorsize, 1, floorsize);
+    // // const geometry = new THREE.PlaneBufferGeometry(50, 50);
+    
+    // this.meshList = [];
+    // const xMax = 5;
+    // const zMax = 4;
+
+    // for (let i = 0; i < xMax; i++) {
+    //   for (let j = 0; j < zMax; j++) {
+    //   const material = new THREE.MeshStandardMaterial({ color: 0xffffff });
+
+    //   const floorPos = floorsize +5;
+    //   const mesh = new THREE.Mesh(geometry, material);
+    //   mesh.position.x = floorPos *i - ((floorPos*xMax)/2);
+    //   mesh.position.y = 0;
+    //   mesh.position.z = floorPos* j - ((floorPos*zMax)/2);
+    //   // mesh.rotation.x = Math.random() * 2 * Math.PI;
+    //   this._scene.add(mesh);
+
+    //   // 配列に保存
+    //   this.meshList.push(mesh);
+    //   }
+    // }
+
+    ////カラーチェンジ：[car] 成功。「.body」なしはだめ。car.jsで「this.body」にしないとだめ。
     this.meshList = [];
-    for (let i = 0; i < 200; i++) {
-      const material = new THREE.MeshStandardMaterial({ color: 0xffffff });
+    this.meshList.push(this._scene._car.body);
+    this.meshList.push(this._scene._car2.body);
+    console.log(this.meshList.length);//ちゃんと２個はいってる
 
-      const mesh = new THREE.Mesh(geometry, material);
-      mesh.position.x = (Math.random() - 0.5) * 800;
-      mesh.position.y = (Math.random() - 0.5) * 800;
-      mesh.position.z = (Math.random() - 0.5) * 800;
-      mesh.rotation.x = Math.random() * 2 * Math.PI;
-      mesh.rotation.y = Math.random() * 2 * Math.PI;
-      mesh.rotation.z = Math.random() * 2 * Math.PI;
-      // scene.add(mesh);
-      this._scene.add(mesh);
+    ////カラーチェンジ：[rail] これはうまくいかなかった。Materialの種類の問題かも
+    // this.meshList = [];
+    // this.meshList.push(this._scene._rail);
+    // console.log(this.meshList.length);//ちゃんと２個はいってる
 
-      // 配列に保存
-      // meshList.push(mesh);
-      this.meshList.push(mesh);
-    }
 
     // レイキャストを作成
-    // const raycaster = new THREE.Raycaster();
     this.raycaster = new THREE.Raycaster();
 
-    // canvas.addEventListener('mousemove', handleMouseMove);
+
     window.addEventListener('mousemove', this.handleMouseMove, false);
 
     // フレーム毎の更新
     this._update();
+
+    console.log("ok");
 
   }
 
@@ -77,32 +95,36 @@ export class App{
      */
   _update() {
 
-    // レイキャスト = マウス位置からまっすぐに伸びる光線ベクトルを生成
-    this.raycaster.setFromCamera(this.mouse, this._scene.camera);
-
-    // その光線とぶつかったオブジェクトを得る
-    // const intersects = raycaster.intersectObjects(meshList);
-    const intersects = this.raycaster.intersectObjects(this.meshList);
-
-    // meshList.map(mesh => {
-    this.meshList.map(mesh => {
-      // 交差しているオブジェクトが1つ以上存在し、
-      // 交差しているオブジェクトの1番目(最前面)のものだったら
-      if (intersects.length > 0 && mesh === intersects[0].object) {
-        // 色を赤くする
-        mesh.material.color.setHex(0xff0000);
-      } else {
-        // それ以外は元の色にする
-        mesh.material.color.setHex(0xffffff);
-      }
-    });
-
-
     requestAnimationFrame(this._update);
     // シーンの更新
     this._scene.update();
     // 描画
     this._renderer.render(this._scene, this._scene.camera);
+
+
+
+
+    // レイキャスト = マウス位置からまっすぐに伸びる光線ベクトルを生成
+    this.raycaster.setFromCamera(this.mouse, this._scene.camera);
+
+    // その光線とぶつかったオブジェクトを得る
+    const intersects = this.raycaster.intersectObjects(this.meshList);
+    console.log(intersects.length);//0
+
+
+
+    this.meshList.map(mesh => {
+      // 交差しているオブジェクトが1つ以上存在し、
+      // 交差しているオブジェクトの1番目(最前面)のものだったら
+      if (intersects.length > 0 && mesh === intersects[0].object) {
+      // 色を赤くする
+        mesh.material.color.setHex(0xff0000);
+        console.log("okMeshIf");
+      } else {
+        // それ以外は元の色にする
+        mesh.material.color.setHex(0xffffff);
+      }
+    });
 
   }
 
