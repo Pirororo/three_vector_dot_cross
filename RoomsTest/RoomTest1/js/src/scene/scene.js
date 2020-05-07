@@ -2,6 +2,7 @@ import * as THREE from '../../libs/three.module.js';
 import Camera from '../camera/camera.js';
 import Rail from '../objects/rail.js';
 import Car from '../objects/car.js';
+import RoomBasic from '../objects/room/roomBasic.js';
 
 /**
  * ステップ２シーンクラスです。
@@ -53,6 +54,11 @@ export default class Scene extends THREE.Scene {
         this._car2 = new Car();
         this._car2.position.set(0,0,0);
         this.add(this._car2);
+
+        //部屋ベーシック
+        this._roombasic= new RoomBasic();
+        this._roombasic.position.set(0,0,0);
+        this.add(this._roombasic);
 
 
     }

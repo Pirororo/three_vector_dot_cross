@@ -35,43 +35,12 @@ export class App{
     window.addEventListener('resize', this._resize);
 
 
-    ////カラーチェンジ：[box] 成功。
+    ////カラーチェンジ：[box]と[car] 成功。meshListをroomBasic内でつくることに成功。
     // // マウスとの交差を調べたいものは配列に格納する
-    // const floorsize = 10;
-    // const geometry = new THREE.BoxBufferGeometry(floorsize, 1, floorsize);
-    // // const geometry = new THREE.PlaneBufferGeometry(50, 50);
-    
-    // this.meshList = [];
-    // const xMax = 5;
-    // const zMax = 4;
-
-    // for (let i = 0; i < xMax; i++) {
-    //   for (let j = 0; j < zMax; j++) {
-    //   const material = new THREE.MeshStandardMaterial({ color: 0xffffff });
-
-    //   const floorPos = floorsize +5;
-    //   const mesh = new THREE.Mesh(geometry, material);
-    //   mesh.position.x = floorPos *i - ((floorPos*xMax)/2);
-    //   mesh.position.y = 0;
-    //   mesh.position.z = floorPos* j - ((floorPos*zMax)/2);
-    //   // mesh.rotation.x = Math.random() * 2 * Math.PI;
-    //   this._scene.add(mesh);
-
-    //   // 配列に保存
-    //   this.meshList.push(mesh);
-    //   }
-    // }
-
-    ////カラーチェンジ：[car] 成功。「.body」なしはだめ。car.jsで「this.body」にしないとだめ。
-    this.meshList = [];
+    this.meshList = this._scene._roombasic.meshList;
     this.meshList.push(this._scene._car.body);
     this.meshList.push(this._scene._car2.body);
-    console.log(this.meshList.length);//ちゃんと２個はいってる
-
-    ////カラーチェンジ：[rail] これはうまくいかなかった。Materialの種類の問題かも
-    // this.meshList = [];
-    // this.meshList.push(this._scene._rail);
-    // console.log(this.meshList.length);//ちゃんと２個はいってる
+    console.log(this.meshList.length);//22個
 
 
     // レイキャストを作成
