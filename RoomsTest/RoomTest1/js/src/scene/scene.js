@@ -24,9 +24,12 @@ export default class Scene extends THREE.Scene {
 
         //camera
         this.camera = new Camera();//thisにすること！！！最終的にはgame2.jsでsceneにaddする
-        this.camera.position.x = 10;
+        // this.camera.position.x = 10;
         this.camera.position.y = 80;
-        this.camera.position.z = 30;
+        // this.camera.position.z = 30;
+
+        //roomCamera
+        this.roomCamera = new Camera();//thisにすること！！！最終的にはgame2.jsでsceneにaddする
 
 
         // 環境光源
@@ -53,7 +56,14 @@ export default class Scene extends THREE.Scene {
         //車2
         this._car2 = new Car();
         this._car2.position.set(0,0,0);
+        this._car2.scale.multiplyScalar(1);
         this.add(this._car2);
+
+        // //車3
+        // this._car3 = new Car();
+        // this._car3.position.set(0,0,0);
+        // // this._car3.scale.multiplyScalar(4);
+        // this.add(this._car3);
 
         //部屋ベーシック
         this._roombasic= new RoomBasic();
@@ -66,6 +76,7 @@ export default class Scene extends THREE.Scene {
     update(){
 
         this.camera.update();//lookAtで中心みてる
+
         this._frame++;
         if (this._frame > 360) {
           this._frame = 0;

@@ -12,7 +12,8 @@ export class App{
   constructor(sceneInstance){
     //この中からconstructer外部のmethodを呼び出すためにはbindする必要がある
     this._update = this._update.bind(this);
-    this. handleMouseMove = this.handleMouseMove.bind(this);
+    this.cameraChange = this.cameraChange.bind(this);
+    this.handleMouseMove = this.handleMouseMove.bind(this);
     this._resize = this._resize.bind(this);
 
     // DOM
@@ -40,6 +41,7 @@ export class App{
     this.meshList = this._scene._roombasic.meshList;
     this.meshList.push(this._scene._car.body);
     this.meshList.push(this._scene._car2.body);
+    // this.meshList.push(this._scene._car3.body);
     console.log(this.meshList.length);//22個
 
 
@@ -48,6 +50,8 @@ export class App{
 
 
     window.addEventListener('mousemove', this.handleMouseMove, false);
+
+    window.addEventListener('mouseclick', this.cameraChange, false);
 
     // フレーム毎の更新
     this._update();
@@ -78,7 +82,7 @@ export class App{
 
     // その光線とぶつかったオブジェクトを得る
     const intersects = this.raycaster.intersectObjects(this.meshList);
-    console.log(intersects.length);//0
+    console.log(intersects.length);
 
 
 
@@ -88,6 +92,7 @@ export class App{
       if (intersects.length > 0 && mesh === intersects[0].object) {
       // 色を赤くする
         mesh.material.color.setHex(0xff0000);
+        mesh.material.opacity = 0.2;
         console.log("okMeshIf");
       } else {
         // それ以外は元の色にする
@@ -105,6 +110,14 @@ export class App{
     // (-1 to +1) for both components
     this.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
     this.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+  
+  }
+
+  cameraChange( event ) {
+    // // calculate mouse position in normalized device coordinates
+    // // (-1 to +1) for both components
+    // this.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+    // this.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
   
   }
 
