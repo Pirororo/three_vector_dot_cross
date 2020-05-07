@@ -10,78 +10,53 @@ export default class Rail extends THREE.Object3D {
     //     return this._points;
     // }
 
-    constructor() {
-      super();
-  
-      this._points = [];
-      let radius = 5;
-      for (let index = 0; index < 362; index++) {
-        let rad = index * Math.PI / 180;
-  
-        let sin = Math.sin(rad * 3);
-  
-        let x = radius * Math.cos(rad) * 2 + sin * 2;
-        let y = radius * Math.sin(rad) + sin * 3;
-        this._points.push(new THREE.Vector3(x, y, 0));
-      }
-  
-      const material = new THREE.LineBasicMaterial({
-        color: 0xff0000,
-      });
-  
-      const geometry = new THREE.Geometry();
-      geometry.vertices = this._points;
-  
-      const line = new THREE.Line(geometry, material);
-      this.add(line);
-    }
 
     // /**
     //  * コンストラクターです。
     //  * @constructor
     //  */
-    // constructor() {
-    //   super();
+    constructor() {
+      super();
+
+      //レールの点 
+      this._points = [];//なんだこのかきかたwwwww
+      let radius = 10;
+      const pointNUM = 362;
+
+      for( let i = 0; i<pointNUM; i++){
+        const point = new THREE.Vector3();
+        point.x = radius * Math.sin(2* i* Math.PI/180);
+        point.y = radius * Math.cos(i* Math.PI/180);
+        point.z = radius * Math.sin(i* Math.PI/180);
+        this._points.push(point);
+      }
+
+      //こっちの書き方でもいい
+      // for( let i = 0; i<pointNUM; i++){
+      //   let x = radius * Math.sin(2* i* Math.PI/180);
+      //   let y = radius * Math.cos(i* Math.PI/180);
+      //   let z = radius * Math.cos(i* Math.PI/180);
+      //   this._points.push(new THREE.Vector3(x,y,z));
+      // }
+
+      const material = new THREE.LineBasicMaterial({
+        color: 0xff0000,
+      });
+      const geometry = new THREE.Geometry();
+      geometry.vertices = this._points;
+
+      const line = new THREE.Line(geometry, material);
+      this.add(line);//忘れずにかく
+
+    //もしくはこっち
+    //   this.line = new THREE.Line(geometry, material);
+    //   this.add(this.line);//これ要る
+
+    }
   
-    //   //レールの点 
-    //   this._points = [];//なんだこのかきかたwwwww
-    //   let radius = 10;
-    //   const pointNUM = 360;
-    //   for( let i = 0; i<pointNUM; i++){
-    //     const point = new THREE.Vector3();
-    //     point.x = radius * Math.sin(2* i* Math.PI/180);
-    //     point.y = radius * Math.cos(i* Math.PI/180);
-    //     point.z = radius * Math.sin(i* Math.PI/180);
-    //     this._points.push(point);
-    //   }
-
-    // //もしくはこっちの書き方
-    // //   for (let index = 0; index < 362; index++) {
-    // //     let rad = index * Math.PI / 180;
-    // //     let sin = Math.sin(rad * 3); 
-    // //     let x = radius * Math.cos(rad) * 2 + sin * 2;
-    // //     let y = radius * Math.sin(rad) + sin * 3;
-    // //     this._points.push(new THREE.Vector3(x, y, 0));
-    // //   }
-
-    //   const material = new THREE.LineBasicMaterial({
-    //     color: 0xff0000,
-    //   });
-    //   const geometry = new THREE.Geometry();
-    //   geometry.vertices = this._points;
-
-    //   const line = new THREE.Line(geometry, material);
-    //   this.add(line);//忘れずにかく
-
-    // //もしくはこっち
-    // //   this.line = new THREE.Line(geometry, material);
-    // //   this.add(this.line);//これ要る
-
-    // }
-  
-    // /**
-    //  * フレーム毎の更新をします。
-    //  */
-    // update() {}
+    /**
+     * フレーム毎の更新をします。
+     */
+    update() {}
   }
   

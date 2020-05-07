@@ -10,8 +10,10 @@ export class App{
    * @param sceneInstance
    */
   constructor(sceneInstance){
-    this._update = this._update.bind(this);//？
-    this._resize = this._resize.bind(this);//？
+    //この中からconstructer外部のmethodを呼び出すためにはbindする必要がある
+    this._update = this._update.bind(this);
+    this. handleMouseMove = this.handleMouseMove.bind(this);
+    this._resize = this._resize.bind(this);
 
     // DOM
     this._wrapper = document.getElementById('app');//あれ？#いらない？canvasじゃなくてdivタグにかいてるのはなぜ？
@@ -28,7 +30,6 @@ export class App{
     this._renderer.setClearColor(0x000000);
     this._renderer.setPixelRatio(1);
     this._wrapper.appendChild(this._renderer.domElement);//'app'のタグ内にレンダラーのdomElementを追加する
-
 
     // リサイズ
     this._resize();
@@ -61,25 +62,19 @@ export class App{
     this.raycaster = new THREE.Raycaster();
 
     // canvas.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mousemove', this.handleMouseMove, false);
 
     // フレーム毎の更新
     this._update();
 
-    function handleMouseMove(event) {
-      const x = event.clientX;
-      const y = event.clientY;
-      // const xu = 50;
-      // const y = 100;
-      const w = window.innerWidth;
-      const h = window.innerHeight;
-      this.mouse.x = (x / w) * 2 - 1;
-      this.mouse.y = -(y / h) * 2 + 1;
-      // this.mouse.x = 100;
-      // this.mouse.y = 200;
-    }
   }
 
+
+
+
+  /**
+     * フレーム毎の更新をします。
+     */
   _update() {
 
     // レイキャスト = マウス位置からまっすぐに伸びる光線ベクトルを生成
@@ -112,7 +107,18 @@ export class App{
   }
 
   /**
-   * リサイズをかけます。
+  * マウスイベント
+  */
+  handleMouseMove( event ) {
+    // calculate mouse position in normalized device coordinates
+    // (-1 to +1) for both components
+    this.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+    this.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+  
+  }
+
+  /**
+   * リサイズ
    */
   _resize() {
     const width = this._wrapper.clientWidth;
