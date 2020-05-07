@@ -69,7 +69,13 @@ export default class RoomBasic extends THREE.Object3D {
 
                 /////////////////////////////////////
 
-                this.roomList = [ new RoomN1(), new RoomN2(),new RoomN1(),new RoomN1(), new RoomN1(),new RoomN1(),new RoomN1(), new RoomN1(),new RoomN1(),new RoomN1(), new RoomN1(),new RoomN1(),new RoomN1(), new RoomN1(),new RoomN1(),new RoomN1(), new RoomN1(),new RoomN1(),new RoomN1(), new RoomN1()];
+                this.roomList = [ 
+                    new RoomN1(), new RoomN2(), new RoomN1(), new RoomN1(),
+                    new RoomN1(), new RoomN1(), new RoomN1(), new RoomN1(),
+                    new RoomN1(), new RoomN1(), new RoomN1(), new RoomN1(),
+                    new RoomN1(), new RoomN1(), new RoomN1(), new RoomN1(),
+                    new RoomN1(), new RoomN1(), new RoomN1(), new RoomN1()
+                ];
 
 
                 // this.roomList[k] = new RoomN1();

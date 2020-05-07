@@ -51,12 +51,16 @@ export class App{
 
     window.addEventListener('mousemove', this.handleMouseMove, false);
 
-    window.addEventListener('mouseclick', this.cameraChange, false);
+    window.addEventListener('click', this.cameraChange, false);
 
     // フレーム毎の更新
     this._update();
 
     console.log("ok");
+
+
+
+    this.camSwitch = true;
 
   }
 
@@ -72,33 +76,35 @@ export class App{
     // シーンの更新
     this._scene.update();
     // 描画
-    this._renderer.render(this._scene, this._scene.camera);
+    
+    if(this.camSwitch == true){
+      this._renderer.render(this._scene, this._scene.camera);
+    }else{
+      this._renderer.render(this._scene, this._scene.roomCamera);
+    }
+
+    // // レイキャスト = マウス位置からまっすぐに伸びる光線ベクトルを生成
+    // this.raycaster.setFromCamera(this.mouse, this._scene.camera);
+
+    // // その光線とぶつかったオブジェクトを得る
+    // const intersects = this.raycaster.intersectObjects(this.meshList);
+    // console.log(intersects.length);
 
 
 
-
-    // レイキャスト = マウス位置からまっすぐに伸びる光線ベクトルを生成
-    this.raycaster.setFromCamera(this.mouse, this._scene.camera);
-
-    // その光線とぶつかったオブジェクトを得る
-    const intersects = this.raycaster.intersectObjects(this.meshList);
-    console.log(intersects.length);
-
-
-
-    this.meshList.map(mesh => {
-      // 交差しているオブジェクトが1つ以上存在し、
-      // 交差しているオブジェクトの1番目(最前面)のものだったら
-      if (intersects.length > 0 && mesh === intersects[0].object) {
-      // 色を赤くする
-        mesh.material.color.setHex(0xff0000);
-        mesh.material.opacity = 0.2;
-        console.log("okMeshIf");
-      } else {
-        // それ以外は元の色にする
-        mesh.material.color.setHex(0xffffff);
-      }
-    });
+    // this.meshList.map(mesh => {
+    //   // 交差しているオブジェクトが1つ以上存在し、
+    //   // 交差しているオブジェクトの1番目(最前面)のものだったら
+    //   if (intersects.length > 0 && mesh === intersects[0].object) {
+    //   // 色を赤くする
+    //     mesh.material.color.setHex(0xff0000);
+    //     mesh.material.opacity = 0.2;
+    //     console.log("okMeshIf");
+    //   } else {
+    //     // それ以外は元の色にする
+    //     mesh.material.color.setHex(0xffffff);
+    //   }
+    // });
 
   }
 
@@ -111,13 +117,38 @@ export class App{
     this.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
     this.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
   
+    console.log("okMouse");
   }
 
-  cameraChange( event ) {
-    // // calculate mouse position in normalized device coordinates
-    // // (-1 to +1) for both components
-    // this.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-    // this.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+  cameraChange() {
+
+    console.log("okClick");
+
+    if(this.camSwitch == true){
+      // レイキャスト = マウス位置からまっすぐに伸びる光線ベクトルを生成
+      this.raycaster.setFromCamera(this.mouse, this._scene.camera);
+
+      // その光線とぶつかったオブジェクトを得る
+      const intersects = this.raycaster.intersectObjects(this.meshList);
+      console.log(intersects.length);
+
+
+      this.meshList.map(mesh => {
+        // 交差しているオブジェクトが1つ以上存在し、
+        // 交差しているオブジェクトの1番目(最前面)のものだったら
+        if (intersects.length > 0 && mesh === intersects[0].object) {
+          
+          this.camSwitch = false;
+          this._scene.roomCamera.position.copy(intersects[0].object.position);
+          this._scene.roomCamera.position.y = 20;
+          this._scene.roomCamera.lookAt(intersects[0].object.position);
+          
+          console.log("okCamera");
+        }
+      });
+    }else{
+      this.camSwitch = true;
+    }
   
   }
 

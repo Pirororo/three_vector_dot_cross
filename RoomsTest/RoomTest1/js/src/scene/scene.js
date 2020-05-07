@@ -1,5 +1,5 @@
 import * as THREE from '../../libs/three.module.js';
-import Camera from '../camera/camera.js';
+import {Camera, RoomCamera} from '../camera/camera.js';
 import Rail from '../objects/rail.js';
 import Car from '../objects/car.js';
 import RoomBasic from '../objects/room/roomBasic.js';
@@ -29,7 +29,7 @@ export default class Scene extends THREE.Scene {
         // this.camera.position.z = 30;
 
         //roomCamera
-        this.roomCamera = new Camera();//thisにすること！！！最終的にはgame2.jsでsceneにaddする
+        this.roomCamera = new RoomCamera();//thisにすること！！！最終的にはgame2.jsでsceneにaddする
 
 
         // 環境光源
