@@ -83,6 +83,8 @@ export class App{
       this._renderer.render(this._scene, this._scene.roomCamera);
     }
 
+
+
     // // レイキャスト = マウス位置からまっすぐに伸びる光線ベクトルを生成
     // this.raycaster.setFromCamera(this.mouse, this._scene.camera);
 
@@ -133,20 +135,22 @@ export class App{
       console.log(intersects.length);
 
 
-      this.meshList.map(mesh => {
+      this.meshList.map( mesh => {
         // 交差しているオブジェクトが1つ以上存在し、
         // 交差しているオブジェクトの1番目(最前面)のものだったら
         if (intersects.length > 0 && mesh === intersects[0].object) {
           
           this.camSwitch = false;
           this._scene.roomCamera.position.copy(intersects[0].object.position);
-          this._scene.roomCamera.position.y = 20;
+          this._scene.roomCamera.position.y += 20;
           this._scene.roomCamera.lookAt(intersects[0].object.position);
           
           console.log("okCamera");
         }
       });
+
     }else{
+
       this.camSwitch = true;
     }
   

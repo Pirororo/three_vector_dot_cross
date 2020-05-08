@@ -27,7 +27,7 @@ export default class RoomBasic extends THREE.Object3D {
             for (let j = 0; j < zMax; j++) {
 
                 // const geometry = new THREE.BoxBufferGeometry(floorsize, 1, floorsize);
-                const material = new THREE.MeshPhongMaterial({ color: 0x0fffff, opacity:0.5 });
+                const material = new THREE.MeshPhongMaterial({ color: 0xffffff, opacity:0.5 });
 
 
                 ////もとのやつ//////////////////////////////////
@@ -38,36 +38,15 @@ export default class RoomBasic extends THREE.Object3D {
                 // mesh.position.y = 0;
                 // mesh.position.z = floorPos* j - ((floorPos*zMax)/2);
                 // // mesh.rotation.x = Math.random() * 2 * Math.PI;
-                // // this._scene.add(mesh);
+                // // this._scene.add(mesh);//app.jsにいたため、下の行に書き換え
                 // this.add(mesh);
-    
-    
+
                 // // 配列に保存
                 // this.meshList.push(mesh);
 
 
-                ////addでだめ//////////////////////////////////
 
-                // this.roomMeshList = [];
-                // const roomN1 = new RoomN1();
-                // this.roomMeshList[k].add(roomN1.maru);//addだめだって
-
-                // const floorPos = floorsize +5;
-                // const mesh = new THREE.Mesh(geometry, material);
-                // mesh.position.x = floorPos *i - ((floorPos*(xMax-1))/2);
-                // mesh.position.y = 0;
-                // mesh.position.z = floorPos* j - ((floorPos*(zMax-1))/2);
-                // this.roomMeshList[k].add(mesh);
-
-                // this.add(this.roomMeshList[k]);
-
-                // // 配列に保存
-                // this.meshList.push(this.roomMeshList[k]);
-
-                // k++;
-
-
-                /////////////////////////////////////
+                ////ok/////////////////////////////////
 
                 this.roomList = [ 
                     new RoomN1(), new RoomN2(), new RoomN1(), new RoomN1(),
@@ -78,54 +57,57 @@ export default class RoomBasic extends THREE.Object3D {
                 ];
 
 
-                // this.roomList[k] = new RoomN1();
-                // this.meshList[k]= roomN1.maru;//roomN1.maruはmesh
+                // // this.roomList[k] = new RoomN1();
+                // // this.meshList[k]= roomN1.maru;//roomN1.maruはmesh
 
-                this.meshList[k]= this.roomList[k].maru;//roomN1.maruはmesh
+                // this.box = new THREE.Mesh(geometry, material);
+                // this.meshList[k]= this.box;////////////////////
+                // this.meshList[k].add(this.roomList[k].maru);//roomN1.maruはmesh
+
+                // const floorPos = floorsize +5;
+                // this.meshList[k].position.x = floorPos *i - ((floorPos*(xMax-1))/2);
+                // this.meshList[k].position.y = 0;
+                // this.meshList[k].position.z = floorPos* j - ((floorPos*(zMax-1))/2);
+
+                // this.add(this.meshList[k]);
+
+                // k++;//だいじ
+
+
+                ////ok/////////////////////////////////
+                //this.meshの１つ下の階層にthis.roomList[k].maruがくる→this.boxもthis.roomList[k].maruもmeshListには入るが、raycasterでmeshとしてよびだされるのはthis.boxのみ
+
+
+                this.mesh = new THREE.Mesh();
+                this.box = new THREE.Mesh(geometry, material);
+                // this.mesh.add(this.box);
+                this.mesh = this.box;//this.meshとthis.boxは同等になる
+                this.mesh.add(this.roomList[k].maru);
 
                 const floorPos = floorsize +5;
-                this.mesh = new THREE.Mesh(geometry, material);
 
-                this.meshList[k].add (this.mesh);////////////////////
-                this.meshList[k].position.x = floorPos *i - ((floorPos*(xMax-1))/2);
-                this.meshList[k].position.y = 0;
-                this.meshList[k].position.z = floorPos* j - ((floorPos*(zMax-1))/2);
+                this.mesh.position.x = floorPos *i - ((floorPos*(xMax-1))/2);
+                this.mesh.position.y = 0;
+                this.mesh.position.z = floorPos* j - ((floorPos*(zMax-1))/2);
+                this.add(this.mesh);
 
-                this.add(this.meshList[k]);
+                // 配列に保存
+                this.meshList.push(this.mesh);
 
-                k++;//だいじ
-
-
-                /////////////////////////////////////
+                k++;
 
 
-                // this.mesh = new THREE.Mesh();
-                // this.mesh.add(this.roomList[k].maru);
-                // // this.mesh = this.roomList[k].maru;//roomN1.maruはmesh
-
-                // const floorPos = floorsize +5;
-                // this.box = new THREE.Mesh(geometry, material);
-                // this.mesh.add(this.box);
-                // this.mesh.position.x = floorPos *i - ((floorPos*(xMax-1))/2);
-                // this.mesh.position.y = 0;
-                // this.mesh.position.z = floorPos* j - ((floorPos*(zMax-1))/2);
-                // this.add(this.mesh);
-
-                // // 配列に保存
-                // this.meshList.push(this.mesh);
-
-                // k++;
-
-                /////////////////////////////////////
+                ////だめ/////////////////////////////////
+                //meshListには入るが、raycasterで認識されない
 
 
-                // const mesh = new THREE.Mesh();
+                // const mesh = new THREE.Mesh(new THREE.Mesh(geometry, material));
+                
+                // mesh.add(box);
                 // mesh.add(this.roomList[k].maru);
-                // // this.mesh = this.roomList[k].maru;//roomN1.maruはmesh
 
                 // const floorPos = floorsize +5;
-                // this.box = new THREE.Mesh(geometry, material);
-                // mesh.add(this.box);
+                
                 // mesh.position.x = floorPos *i - ((floorPos*(xMax-1))/2);
                 // mesh.position.y = 0;
                 // mesh.position.z = floorPos* j - ((floorPos*(zMax-1))/2);

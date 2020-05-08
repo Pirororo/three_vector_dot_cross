@@ -48,7 +48,7 @@ export default class Scene extends THREE.Scene {
         //車
         this._car = new Car();
         this._car.position.set(0,0,0);
-        this._car.scale.multiplyScalar(0.5);
+        this._car.scale.multiplyScalar(1.5);
         // this._car.position.copy(this._rail.points[0]);//これのときはget points()関数の定義が必要
         this._car.position.copy(this._rail._points[0]);
         this.add(this._car);
