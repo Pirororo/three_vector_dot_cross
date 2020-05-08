@@ -151,11 +151,13 @@ export class App{
             this.camSwitch = "roomCam";
             //set使うとなぜか視界真っ暗になっちゃう
             this._scene.roomCamera.position.copy(intersects[0].object.getWorldPosition());
-            this._scene.roomCamera.position.y += 20;
-            this._scene.roomCamera.lookAt(intersects[0].object.getWorldPosition());
             
+            this._scene.roomCamera.position.y += 5;
+            this._scene.roomCamera.position.z += 15;
+            this._scene.roomCamera.lookAt(intersects[0].object.maru.getWorldPosition());
+
           }
-          
+
           console.log("okCamera");
         }
       });

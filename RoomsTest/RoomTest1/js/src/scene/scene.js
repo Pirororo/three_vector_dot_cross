@@ -26,8 +26,8 @@ export default class Scene extends THREE.Scene {
         //mainCamera
         this.camera = new Camera();//thisにすること！！！最終的にはgame2.jsでsceneにaddする
         this.camera.position.x = 10;
-        this.camera.position.y = 80;
-        this.camera.position.z = 30;
+        this.camera.position.y = 60;
+        this.camera.position.z = 40;
 
         //roomCamera
         this.roomCamera = new RoomCamera();//thisにすること！！！最終的にはgame2.jsでsceneにaddする
@@ -38,7 +38,7 @@ export default class Scene extends THREE.Scene {
 
 
         // 環境光源
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
         this.add(ambientLight);
 
         // 平行光源
@@ -119,6 +119,7 @@ export default class Scene extends THREE.Scene {
         this.nextPoint = this._rail._points[this._frame +1];
         this.moveCamera.position.copy(this.currentPoint);
         this.moveCamera.lookAt(this.nextPoint);
+        // this.moveCamera.lookAt(new THREE.Vector3(0,0,0));
     }
 
 

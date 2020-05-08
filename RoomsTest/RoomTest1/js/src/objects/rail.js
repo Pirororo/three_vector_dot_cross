@@ -20,13 +20,13 @@ export default class Rail extends THREE.Object3D {
 
       //レールの点 
       this._points = [];
-      let radius = 30;
+      let radius = 20;
       // const pointNUM = 362;//362は大丈夫なのに360だとだめだった！！！！！！！！！！！！！
 
       // for( let i = 0; i<pointNUM; i++){
       //   const point = new THREE.Vector3();
       //   point.x = radius * Math.sin(2* i* Math.PI/180);
-      //   point.y = radius/2 * Math.cos(i* Math.PI/180);
+      //   point.y = radius/4 * Math.cos(i* Math.PI/180);
       //   point.z = radius * Math.sin(i* Math.PI/180);
       //   this._points.push(point);
       // }
@@ -37,7 +37,7 @@ export default class Rail extends THREE.Object3D {
       for( let i = 0; i<pointNUM; i++){
         const point = new THREE.Vector3();
         point.x = radius * Math.sin(2* i* Math.PI/180/2);
-        point.y = radius/2 * Math.cos(i* Math.PI/180/2);
+        point.y = radius/4 * Math.cos(i* Math.PI/180/2)   + 5;
         point.z = radius * Math.sin(i* Math.PI/180/2);
         this._points.push(point);
       }
