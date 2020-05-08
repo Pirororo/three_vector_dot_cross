@@ -25,9 +25,9 @@ export default class Scene extends THREE.Scene {
         //カメラ３種
         //mainCamera
         this.camera = new Camera();//thisにすること！！！最終的にはgame2.jsでsceneにaddする
-        // this.camera.position.x = 10;
+        this.camera.position.x = 10;
         this.camera.position.y = 80;
-        // this.camera.position.z = 30;
+        this.camera.position.z = 30;
 
         //roomCamera
         this.roomCamera = new RoomCamera();//thisにすること！！！最終的にはgame2.jsでsceneにaddする
@@ -83,7 +83,8 @@ export default class Scene extends THREE.Scene {
         this.camera.update();//lookAtで中心みてる
 
         this._frame++;
-        if (this._frame > 360) {
+        // if (this._frame > 360) {
+        if (this._frame > 720) {//トロッコおそくしてる
           this._frame = 0;
         }
 
