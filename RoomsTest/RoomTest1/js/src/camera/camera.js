@@ -37,3 +37,22 @@ export class RoomCamera extends THREE.PerspectiveCamera{
     // this.lookAt(new THREE.Vector3(0, 0, 0));
   }
 }
+
+export class MoveCamera extends THREE.PerspectiveCamera{
+  /**
+ * コンストラクターです。
+ * @constructor
+ */
+constructor() {
+  super(45, window.innerWidth / window.innerHeight, 10, 500);
+
+}
+
+/**
+ * 毎フレームの更新をかけます。
+ */
+update() {
+  // // 原点に注目
+  // this.lookAt(new THREE.Vector3(0, 0, 0));
+}
+}

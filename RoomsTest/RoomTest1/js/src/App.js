@@ -60,7 +60,7 @@ export class App{
 
 
 
-    this.camSwitch = true;
+    this.camSwitch = "mainCam";
 
   }
 
@@ -77,10 +77,12 @@ export class App{
     this._scene.update();
     // 描画
     
-    if(this.camSwitch == true){
+    if(this.camSwitch == "mainCam"){
       this._renderer.render(this._scene, this._scene.camera);
-    }else{
+    }else if(this.camSwitch == "roomCam"){
       this._renderer.render(this._scene, this._scene.roomCamera);
+    }else if(this.camSwitch == "moveCam"){
+      this._renderer.render(this._scene, this._scene.moveCamera);
     }
 
 
@@ -126,7 +128,7 @@ export class App{
 
     console.log("okClick");
 
-    if(this.camSwitch == true){
+    if(this.camSwitch == "mainCam"){
       // レイキャスト = マウス位置からまっすぐに伸びる光線ベクトルを生成
       this.raycaster.setFromCamera(this.mouse, this._scene.camera);
 
@@ -139,11 +141,20 @@ export class App{
         // 交差しているオブジェクトが1つ以上存在し、
         // 交差しているオブジェクトの1番目(最前面)のものだったら
         if (intersects.length > 0 && mesh === intersects[0].object) {
-          
-          this.camSwitch = false;
-          this._scene.roomCamera.position.copy(intersects[0].object.position);
-          this._scene.roomCamera.position.y += 20;
-          this._scene.roomCamera.lookAt(intersects[0].object.position);
+
+          if (mesh == this._scene._car.body){
+
+            this.camSwitch = "moveCam";
+
+          }else{
+
+            this.camSwitch = "roomCam";
+            //set使うとなぜか視界真っ暗になっちゃう
+            this._scene.roomCamera.position.copy(intersects[0].object.getWorldPosition());
+            this._scene.roomCamera.position.y += 20;
+            this._scene.roomCamera.lookAt(intersects[0].object.getWorldPosition());
+            
+          }
           
           console.log("okCamera");
         }
@@ -151,10 +162,13 @@ export class App{
 
     }else{
 
-      this.camSwitch = true;
+      this.camSwitch = "mainCam";
     }
   
   }
+
+  // // ワールド座標を取得
+  // const world = targetMesh.getWorldPosition();
 
   /**
    * リサイズ

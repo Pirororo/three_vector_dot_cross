@@ -1,5 +1,5 @@
 import * as THREE from '../../libs/three.module.js';
-import {Camera, RoomCamera} from '../camera/camera.js';
+import {Camera, RoomCamera, MoveCamera} from '../camera/camera.js';
 import Rail from '../objects/rail.js';
 import Car from '../objects/car.js';
 import RoomBasic from '../objects/room/roomBasic.js';
@@ -22,7 +22,8 @@ export default class Scene extends THREE.Scene {
     //   this.add(gridHelper);
 
 
-        //camera
+        //カメラ３種
+        //mainCamera
         this.camera = new Camera();//thisにすること！！！最終的にはgame2.jsでsceneにaddする
         // this.camera.position.x = 10;
         this.camera.position.y = 80;
@@ -30,6 +31,10 @@ export default class Scene extends THREE.Scene {
 
         //roomCamera
         this.roomCamera = new RoomCamera();//thisにすること！！！最終的にはgame2.jsでsceneにaddする
+
+        //moveCamera
+        this.moveCamera = new MoveCamera();//thisにすること！！！最終的にはgame2.jsでsceneにaddする
+
 
 
         // 環境光源
@@ -105,6 +110,14 @@ export default class Scene extends THREE.Scene {
         // this._car.position.copy(this._rail.points[this._frame]);
         // this._car.up.set(normal.x, normal.y, normal.z);
         // this._car.lookAt(this._rail.points[this._frame + 1]);
+
+
+        //moveCamera用。vector3がかえってくる
+        // this.Ahead =  this._getAhead(currentPoint,nextPoint);
+        this.currentPoint = this._rail._points[this._frame];
+        this.nextPoint = this._rail._points[this._frame +1];
+        this.moveCamera.position.copy(this.currentPoint);
+        this.moveCamera.lookAt(this.nextPoint);
     }
 
 
@@ -115,6 +128,14 @@ export default class Scene extends THREE.Scene {
                     .normalize()
                     .cross(new THREE.Vector3(0,0,-1));
         return NormalVec;
+    }
+
+    _getAhead(curretP, nextP) {
+        const AheadVec = curretP
+                    .clone()
+                    .sub(nextP)
+                    .normalize()
+        return AheadVec;
     }
 
 }
