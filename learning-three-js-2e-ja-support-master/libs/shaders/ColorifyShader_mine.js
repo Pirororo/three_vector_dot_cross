@@ -9,7 +9,7 @@ THREE.ColorifyShader = {
 	uniforms: {
 
 		"tDiffuse": { value: null },
-		"color":    { value: new THREE.Color( 0xffffff ) }
+		"color":    { value: new THREE.Color( 0xff0000 ) }
 
 	},
 
@@ -40,7 +40,8 @@ THREE.ColorifyShader = {
 			"vec3 luma = vec3( 0.299, 0.587, 0.114 );",
 			"float v = dot( texel.xyz, luma );",
 
-			"gl_FragColor = vec4( v * color, texel.w );",
+			// "gl_FragColor = vec4( v * color, texel.w );",
+			"gl_FragColor = vec4(v * color * vUv.y , 0.0 );",
 
 			//<mine> これはlumaなしver:結果あまり変わらない
 			//  "gl_FragColor = vec4( texel.xyz * color, texel.w );",
