@@ -8,20 +8,18 @@
 
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
-    <!-- <script type="text/javascript" src="../libs/loaders/OBJLoader.js"></script>
-    <script type="text/javascript" src="../libs/loaders/MTLLoader.js"></script> -->
 
+    //シェーダーに必要なjs
     <script type="text/javascript" src="../libs/postprocessing/EffectComposer.js"></script>
     <script type="text/javascript" src="../libs/postprocessing/ShaderPass.js"></script>
     <script type="text/javascript" src="../libs/postprocessing/RenderPass.js"></script>
-    <!-- <script type="text/javascript" src="../libs/postprocessing/MaskPass.js"></script> -->
+    <script type="text/javascript" src="../libs/postprocessing/MaskPass.js"></script>
     <script type="text/javascript" src="../libs/shaders/CopyShader.js"></script>
 
-    <!-- <script type="text/javascript" src="../libs/shaders/ColorifyShader.js"></script> -->
-    <script type="text/javascript" src="../libs/shaders/ColorifyShader_mine.js"></script>
 
-    <!-- <script type="text/javascript" src="../libs/shaders/LuminosityShader.js"></script>
-    <script type="text/javascript" src="../libs/shaders/UnpackDepthRGBAShader.js"></script> -->
+    <script type="text/javascript" src="../libs/shaders/ColorifyGradientShader_mine.js"></script>
+
+
     <style>
         body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
@@ -52,9 +50,12 @@
         // create a camera, which defines where we're looking at.
         var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
 
-        // create a render and set the size
+        // create a render and set the size 
+        //シェーダー透明度使いたいときはalphaを設定する！！！！！！！！！
+        // var webGLRenderer = new THREE.WebGLRenderer({ alpha: true });
         var webGLRenderer = new THREE.WebGLRenderer();
-        webGLRenderer.setClearColor(new THREE.Color(0xaaaaff));
+        webGLRenderer.setClearColor( 0x000000, 0 );
+        // webGLRenderer.setClearColor(new THREE.Color(0xaaaaff));
         webGLRenderer.setSize(window.innerWidth, window.innerHeight);
         webGLRenderer.shadowMap.enabled = true;
 
@@ -75,34 +76,11 @@
         spotLight.shadow.camera.fov = 120;
         spotLight.shadow.camera.near = 1;
         spotLight.shadow.camera.far = 1000;
+        scene.add(spotLight);
 
         var ambiLight = new THREE.AmbientLight(0x444444);
         scene.add(ambiLight);
 
-
-        scene.add(spotLight);
-        var plane = new THREE.BoxGeometry(1600, 1600, 0.1, 40, 40);
-
-
-        var textureLoader = new THREE.TextureLoader();
-        var cube = new THREE.Mesh(plane, new THREE.MeshPhongMaterial(
-                {
-                    color: 0xffffff,
-                    // map: textureLoader.load("../assets/textures/general/plaster-diffuse.jpg"),
-                    // normalMap: textureLoader.load("../assets/textures/general/plaster-normal.jpg"),
-                    // normalScale: new THREE.Vector2(0.6, 0.6)
-                }));
-        // cube.material.map.wrapS = THREE.RepeatWrapping;
-        // cube.material.map.wrapT = THREE.RepeatWrapping;
-        // cube.material.normalMap.wrapS = THREE.RepeatWrapping;
-        // cube.material.normalMap.wrapT = THREE.RepeatWrapping;
-        cube.rotation.x = Math.PI / 2;
-        // cube.material.map.repeat.set(80, 80);
-
-        cube.receiveShadow = true;
-        cube.position.z = -150;
-        cube.position.x = -150;
-        scene.add(cube);
 
 
         var cube1 = new THREE.Mesh(new THREE.BoxGeometry(30, 10, 2), new THREE.MeshPhongMaterial({color: 0xff0000}));
@@ -134,15 +112,16 @@
 
 
 
-        var colorify = new THREE.ShaderPass(THREE.ColorifyShader);
+        var colorify = new THREE.ShaderPass(THREE.ColorifyGradientShader);
         colorify.uniforms.color.value = new THREE.Color(0xffffff);
-        // colorify.enabled = false;
-        colorify.enabled = true;
+        colorify.uniforms.color2.value = new THREE.Color(0xffffff);
+        colorify.enabled = false;
+        // colorify.enabled = true;
 
 
 
         var renderPass = new THREE.RenderPass(scene, camera);//レンダー
-        var effectCopy = new THREE.ShaderPass(THREE.CopyShader);//コピー？
+        var effectCopy = new THREE.ShaderPass(THREE.CopyShader);//コピー
         effectCopy.renderToScreen = true;
 
         var composer = new THREE.EffectComposer(webGLRenderer);//コンポーズ
@@ -151,9 +130,8 @@
         composer.addPass(renderPass);
 
         composer.addPass(colorify);
-        
-        // composer.addPass(lum);
-        // composer.addPass(unpack);
+
+
         composer.addPass(effectCopy);
 
 
@@ -164,24 +142,44 @@
 
             this.select = 'colorify';
             this.color = 0xff0000;
+            this.color2 = 0xff0000;
 
             this.rotate = false;
 
             this.changeColor = function () {
                 colorify.uniforms.color.value = new THREE.Color(controls.color);
             };
+            this.changeColor2 = function () {
+                colorify.uniforms.color2.value = new THREE.Color(controls.color2);
+            };
 
+            this.switchShader = function () {
+                switch (controls.select) {
+                    case 'none' :
+                    {
+                        enableShader();
+                        break;
+                    }
 
-            // function enableShader(shader) {
-            //     // we're not interested in the first or the last one
-            //     for (var i = 1; i < composer.passes.length - 1; i++) {
-            //         if (composer.passes[i] == shader) {
-            //             composer.passes[i].enabled = true;
-            //         } else {
-            //             composer.passes[i].enabled = false;
-            //         }
-            //     }
-            // }
+                    case 'colorify' :
+                    {
+                        enableShader(colorify);
+                        break;
+                    }
+                }
+            }
+
+            function enableShader(shader) {
+                // we're not interested in the first or the last one
+                for (var i = 1; i < composer.passes.length - 1; i++) {
+                    if (composer.passes[i] == shader) {
+                        composer.passes[i].enabled = true;
+                    } else {
+                        composer.passes[i].enabled = false;
+                    }
+                }
+            }
+
         };
 
 
@@ -193,6 +191,7 @@
 
         var clFolder = gui.addFolder("Colorify");
         clFolder.addColor(controls, "color").onChange(controls.changeColor);
+        clFolder.addColor(controls, "color2").onChange(controls.changeColor2);
 
 
 
@@ -211,7 +210,7 @@
             }
 
             requestAnimationFrame(render);
-//        webGLRenderer.render(scene, camera);
+//        webGLRenderer.render(scene, camera);//シェーダー使うときこれなし！
             composer.render();
         }
 

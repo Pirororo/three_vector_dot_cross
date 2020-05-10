@@ -1,15 +1,16 @@
 /**
- * @author alteredq / http://alteredqualia.com/
+ * @author Hiroko K
  *
  * Colorify shader
- */
+ */	
 
-THREE.ColorifyShader = {
+THREE.ColorifyGradientShader = {
 
 	uniforms: {
 
 		"tDiffuse": { value: null },
-		"color":    { value: new THREE.Color( 0xff0000 ) }
+		"color":    { value: new THREE.Color( 0xff0000 ) },
+		"color2":    { value: new THREE.Color( 0xff0000 ) }
 
 	},
 
@@ -29,6 +30,8 @@ THREE.ColorifyShader = {
 	fragmentShader: [
 
 		"uniform vec3 color;",
+		"uniform vec3 color2;",
+
 		"uniform sampler2D tDiffuse;",
 
 		"varying vec2 vUv;",
@@ -40,11 +43,10 @@ THREE.ColorifyShader = {
 			"vec3 luma = vec3( 0.299, 0.587, 0.114 );",
 			"float v = dot( texel.xyz, luma );",
 
-			// "gl_FragColor = vec4( v * color, texel.w );",
-			"gl_FragColor = vec4(v * color * vUv.y , 0.0 );",
+			"vec3 gradate = color * vUv.y + color2 * (1.0 - vUv.y);",
 
-			//<mine> これはlumaなしver:結果あまり変わらない
-			//  "gl_FragColor = vec4( texel.xyz * color, texel.w );",
+			"gl_FragColor = vec4( v * color, texel.w );",
+			// "gl_FragColor = vec4(v * gradate, texel.w );",
 
 		"}"
 
