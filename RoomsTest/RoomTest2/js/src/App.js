@@ -36,12 +36,8 @@ export class App{
     window.addEventListener('resize', this._resize);
 
 
-    ////カラーチェンジ：[box]と[car] 成功。meshListをroomBasic内でつくることに成功。
     // // マウスとの交差を調べたいものは配列に格納する
-    this.meshList = this._scene._roombasic.meshList;
-    this.meshList.push(this._scene._car.body);
-    this.meshList.push(this._scene._car2.body);
-    // this.meshList.push(this._scene._car3.body);
+    this.meshList = this._scene.meshList;
     console.log(this.meshList.length);//22個
 
 
@@ -84,6 +80,8 @@ export class App{
     }else if(this.camSwitch == "moveCam"){
       this._renderer.render(this._scene, this._scene.moveCamera);
     }
+
+
 
 
 
