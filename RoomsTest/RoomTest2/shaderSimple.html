@@ -4,7 +4,7 @@
 
 <head>
     <title>Example 11.04 - Shader Pass simple</title>
-    <script type="text/javascript" src="../libs/three.js"></script>
+    <!-- <script type="text/javascript" src="../libs/three.js"></script> -->
 
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
@@ -89,16 +89,16 @@
         var cube = new THREE.Mesh(plane, new THREE.MeshPhongMaterial(
                 {
                     color: 0xffffff,
-                    map: textureLoader.load("../assets/textures/general/plaster-diffuse.jpg"),
-                    normalMap: textureLoader.load("../assets/textures/general/plaster-normal.jpg"),
-                    normalScale: new THREE.Vector2(0.6, 0.6)
+                    // map: textureLoader.load("../assets/textures/general/plaster-diffuse.jpg"),
+                    // normalMap: textureLoader.load("../assets/textures/general/plaster-normal.jpg"),
+                    // normalScale: new THREE.Vector2(0.6, 0.6)
                 }));
-        cube.material.map.wrapS = THREE.RepeatWrapping;
-        cube.material.map.wrapT = THREE.RepeatWrapping;
-        cube.material.normalMap.wrapS = THREE.RepeatWrapping;
-        cube.material.normalMap.wrapT = THREE.RepeatWrapping;
+        // cube.material.map.wrapS = THREE.RepeatWrapping;
+        // cube.material.map.wrapT = THREE.RepeatWrapping;
+        // cube.material.normalMap.wrapS = THREE.RepeatWrapping;
+        // cube.material.normalMap.wrapT = THREE.RepeatWrapping;
         cube.rotation.x = Math.PI / 2;
-        cube.material.map.repeat.set(80, 80);
+        // cube.material.map.repeat.set(80, 80);
 
         cube.receiveShadow = true;
         cube.position.z = -150;
