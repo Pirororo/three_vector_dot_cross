@@ -9,7 +9,7 @@
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
 
-    //シェーダーに必要なjs
+    <!-- シェーダーに必要なjs -->
     <script type="text/javascript" src="../libs/postprocessing/EffectComposer.js"></script>
     <script type="text/javascript" src="../libs/postprocessing/ShaderPass.js"></script>
     <script type="text/javascript" src="../libs/postprocessing/RenderPass.js"></script>
@@ -17,6 +17,7 @@
     <script type="text/javascript" src="../libs/shaders/CopyShader.js"></script>
 
 
+    <!-- 自作のグラジエントシェーダー -->
     <script type="text/javascript" src="../libs/shaders/ColorifyGradientShader_mine.js"></script>
 
 
@@ -54,8 +55,8 @@
         //シェーダー透明度使いたいときはalphaを設定する！！！！！！！！！
         // var webGLRenderer = new THREE.WebGLRenderer({ alpha: true });
         var webGLRenderer = new THREE.WebGLRenderer();
-        webGLRenderer.setClearColor( 0x000000, 0 );
-        // webGLRenderer.setClearColor(new THREE.Color(0xaaaaff));
+        // webGLRenderer.setClearColor( 0x000000, 0 );//透明度反映されないときこっち試す
+        webGLRenderer.setClearColor(new THREE.Color(0xaaaaff));//もとはこっち
         webGLRenderer.setSize(window.innerWidth, window.innerHeight);
         webGLRenderer.shadowMap.enabled = true;
 
@@ -140,7 +141,7 @@
 
         var controls = new function () {
 
-            this.select = 'colorify';
+            this.select = 'none';
             this.color = 0xff0000;
             this.color2 = 0xff0000;
 
@@ -203,7 +204,7 @@
 
 //
             if (controls.rotate) {
-                if (mesh) mesh.rotation.y += 0.01;
+                // if (mesh) mesh.rotation.y += 0.01;
                 cube1.rotation.y += 0.01;
                 cube2.rotation.y += 0.01;
                 cube3.rotation.y += 0.01;

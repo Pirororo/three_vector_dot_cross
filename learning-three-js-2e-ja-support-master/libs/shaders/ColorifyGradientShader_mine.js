@@ -45,8 +45,8 @@ THREE.ColorifyGradientShader = {
 
 			"vec3 gradate = color * vUv.y + color2 * (1.0 - vUv.y);",
 
-			"gl_FragColor = vec4( v * color, texel.w );",
-			// "gl_FragColor = vec4(v * gradate, texel.w );",
+			// "gl_FragColor = vec4( v * color, texel.w );",
+			"gl_FragColor = vec4(v * gradate, texel.w );",
 
 		"}"
 
