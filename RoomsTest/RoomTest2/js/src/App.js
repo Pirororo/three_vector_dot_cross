@@ -138,11 +138,11 @@ export class App{
         // 交差しているオブジェクトの1番目(最前面)のものだったら
         if (intersects.length > 0 && mesh === intersects[0].object) {
 
-          if (mesh == this._scene._car.body){
+          // if (mesh == this._scene._car.body){
 
-            this.camSwitch = "moveCam";
+          //   this.camSwitch = "moveCam";
 
-          }else{
+          // }else{
 
             this.camSwitch = "roomCam";
 
@@ -152,9 +152,9 @@ export class App{
             
             this._scene.roomCamera.position.y += 5;
             this._scene.roomCamera.position.z += 15;
-            this._scene.roomCamera.lookAt(intersects[0].object.maru.getWorldPosition());
+            this._scene.roomCamera.lookAt(intersects[0].object.getWorldPosition());
 
-          }
+          // }
 
           console.log("okCamera");
         }
@@ -166,9 +166,6 @@ export class App{
     }
   
   }
-
-  // // ワールド座標を取得
-  // const world = targetMesh.getWorldPosition();
 
   /**
    * リサイズ

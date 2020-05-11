@@ -69,7 +69,7 @@ export default class Scene extends THREE.Scene {
                 for (let k = 0; k < zMax; k++) {
 
 
-                const floorsize = 10 * (Math.random());
+                const floorsize = 20* (Math.random(1.0, 1.0));
                 const geometry = new THREE.PlaneBufferGeometry(floorsize, floorsize);
                 const material = new THREE.MeshPhongMaterial({ 
                     color: 0xffffff, 

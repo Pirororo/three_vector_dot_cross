@@ -101,7 +101,6 @@ export class App{
       if (intersects.length > 0 && mesh === intersects[0].object) {
         mesh.material.transparent = true;
         mesh.material.opacity = 0.8;
-        console.log("okMeshIf");
       } else {
         mesh.material.transparent = true;
         mesh.material.opacity = 0.4;
@@ -118,8 +117,7 @@ export class App{
     // (-1 to +1) for both components
     this.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
     this.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-  
-    console.log("okMouse");
+
   }
 
   cameraChange() {
@@ -148,13 +146,27 @@ export class App{
 
             this.camSwitch = "roomCam";
 
-            this._scene.roomCamera.position.copy(intersects[0].object);
+            // this._scene.roomCamera.position.copy(intersects[0].object);
             // //上のやつをsetつかうときは下のように取り出してかく
-            // this._scene.roomCamera.position.set(intersects[0].object.getWorldPosition().x,intersects[0].object.getWorldPosition().y,intersects[0].object.getWorldPosition().z);
-            
+            this._scene.roomCamera.position.set(
+              intersects[0].object.getWorldPosition().x,
+              intersects[0].object.getWorldPosition().y,
+              intersects[0].object.getWorldPosition().z
+            );
+
             this._scene.roomCamera.position.y += 5;
-            this._scene.roomCamera.position.z += 15;
-            this._scene.roomCamera.lookAt(intersects[0].object.maru.getWorldPosition());
+            // this._scene.roomCamera.position.z += 15;
+
+            // this._scene.roomCamera.lookAt(
+            //   new THREE.Vector3(intersects[0].object.maru)
+            // );
+            this._scene.roomCamera.lookAt(new THREE.Vector3(0,0,0));
+
+            // this._scene.roomCamera.lookAt(
+            //   intersects[0].object.position.x,
+            //   intersects[0].object.position.y,
+            //   intersects[0].object.position.z
+            // );
 
           }
 
