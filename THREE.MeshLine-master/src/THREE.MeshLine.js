@@ -532,6 +532,7 @@ THREE.ShaderChunk[ 'meshline_frag' ] = [
 	'}'
 ].join( '\r\n' );
 
+
 function MeshLineMaterial( parameters ) {
 
 	THREE.ShaderMaterial.call( this, {
