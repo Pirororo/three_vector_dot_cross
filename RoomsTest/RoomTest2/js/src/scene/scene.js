@@ -1,9 +1,6 @@
-
 // import * as THREE from '../../libs/three.module.js';
-import {Camera, RoomCamera, MoveCamera} from '../camera/camera.js';
-// import Rail from '../objects/rail.js';
-// import Car from '../objects/car.js';
-// import RoomBasic from '../objects/room/roomBasic.js';
+// import {Camera, RoomCamera, MoveCamera} from '../camera/camera.js';
+import {Camera} from '../camera/camera.js';
 import Line from '../objects/line.js';
 
 /**
@@ -17,7 +14,6 @@ export default class Scene extends THREE.Scene {
 
         // this._frame = 0;//frame
 
-
         //カメラ３種
         //mainCamera
         this.camera = new Camera();//thisにすること！！！最終的にはgame2.jsでsceneにaddする
@@ -25,25 +21,33 @@ export default class Scene extends THREE.Scene {
         this.camera.position.y = 150;
         this.camera.position.z = 150;
 
-        //roomCamera
-        this.roomCamera = new RoomCamera();//thisにすること！！！最終的にはgame2.jsでsceneにaddする
+        // //roomCamera
+        // this.roomCamera = new RoomCamera();//thisにすること！！！最終的にはgame2.jsでsceneにaddする
 
-        //moveCamera
-        this.moveCamera = new MoveCamera();//thisにすること！！！最終的にはgame2.jsでsceneにaddする
+        // //moveCamera
+        // this.moveCamera = new MoveCamera();//thisにすること！！！最終的にはgame2.jsでsceneにaddする
 
 
 
         // 環境光源
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
         this.add(ambientLight);
 
         // 平行光源
         const directionalLight = new THREE.DirectionalLight(0xffffff, 0.2);
         this.add(directionalLight);
 
-        //スポットライト
+        // //スポットライト
+        // // add spotlight for the shadows
         // var spotLight = new THREE.SpotLight(0xffffff);
-        // spotLight.position.set(20, 20, 20);
+        // spotLight.castShadow = true;
+        // spotLight.position.set(0, 60, 50);
+        // spotLight.intensity = 1;
+        // spotLight.shadow.mapSize.width = 2048;
+        // spotLight.shadow.mapSize.height = 2048;
+        // spotLight.shadow.camera.fov = 120;
+        // spotLight.shadow.camera.near = 1;
+        // spotLight.shadow.camera.far = 1000;
         // this.add(spotLight);
 
         //ライン
@@ -69,14 +73,14 @@ export default class Scene extends THREE.Scene {
             for (let j = 0; j < yMax; j++) {
                 for (let k = 0; k < zMax; k++) {
 
-                    const floorsize = 20* (Math.random(1.0, 1.0));
+                    const floorsize = 5* (Math.random()) +5;
                     const geometry = new THREE.PlaneBufferGeometry(floorsize, floorsize);
 
                     //もとのやつ
-                    const floorPos = floorsize +5;
+                    const floorPos = floorsize +3;
                     const mesh = new THREE.Mesh(geometry, material);
                     mesh.position.x = floorPos *i - ((floorPos*xMax)/2);
-                    mesh.position.y = (floorPos+5) *j - (((floorPos+5)*yMax)/2);
+                    mesh.position.y = (floorPos+3) *j - (((floorPos+3)*yMax)/2);
                     mesh.position.z = floorPos* k - ((floorPos*zMax)/2);
                     mesh.rotation.x = Math.PI/180 * 90;
                     this.add(mesh);
