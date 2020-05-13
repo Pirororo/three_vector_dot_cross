@@ -1,9 +1,10 @@
 
-import * as THREE from '../../libs/three.module.js';
+// import * as THREE from '../../libs/three.module.js';
 import {Camera, RoomCamera, MoveCamera} from '../camera/camera.js';
 import Rail from '../objects/rail.js';
 import Car from '../objects/car.js';
 import RoomBasic from '../objects/room/roomBasic.js';
+import Line from '../objects/line.js';
 
 /**
  * ステップ２シーンクラスです。
@@ -54,14 +55,19 @@ export default class Scene extends THREE.Scene {
         // this._car.position.copy(this._rail._points[0]);
         // this.add(this._car);
 
-
-
         // const material = new THREE.MeshPhongMaterial({ color: 0x0fffff,opacity:0.5 });
 
+        // //ライン
+        // this._line = new Line();
+        // this._line.position.set(0,0,0);
+        // this.add(this._line);
+
+
+        //プレート
         this.meshList = [];
-        const xMax = 10;
-        const yMax = 10;
-        const zMax = 10;
+        const xMax = 7;
+        const yMax = 7;
+        const zMax = 7;
         let k = 0;
 
         for (let i = 0; i < xMax; i++) {
@@ -75,7 +81,7 @@ export default class Scene extends THREE.Scene {
                     color: 0xffffff, 
                     opacity: 0.6,
                     transparent: true,
-                    side: THREE.DoubleSide,
+                    // side: THREE.DoubleSide,
                     blending: THREE.AdditiveBlending
                 
                  });

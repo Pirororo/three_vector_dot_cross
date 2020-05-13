@@ -1,4 +1,4 @@
-import * as THREE from '../../../libs/three.module.js';
+// import * as THREE from '../../../libs/three.module.js';
 import {RoomN1,RoomN2} from './eachRoom/roomN1.js';
 
 /**

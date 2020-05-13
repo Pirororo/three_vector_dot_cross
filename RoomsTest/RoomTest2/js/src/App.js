@@ -1,4 +1,4 @@
-import * as THREE from '../libs/three.module.js';
+// import * as THREE from '../libs/three.module.js';
 /**
  * メインアプリクラスです。
  */
@@ -38,7 +38,7 @@ export class App{
 
     // // マウスとの交差を調べたいものは配列に格納する
     this.meshList = this._scene.meshList;
-    console.log(this.meshList.length);//22個
+    console.log(this.meshList.length);//343個
 
 
     // レイキャストを作成
@@ -90,7 +90,7 @@ export class App{
 
     // その光線とぶつかったオブジェクトを得る
     const intersects = this.raycaster.intersectObjects(this.meshList);
-    console.log(intersects.length);
+    console.log(intersects.length);//686個→0個
 
 
     this.meshList.map(mesh => {
@@ -161,10 +161,9 @@ export class App{
       });
 
     }else{
-
       this.camSwitch = "mainCam";
     }
-  
+
   }
 
   /**

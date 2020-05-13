@@ -24,14 +24,15 @@ window.addEventListener('load', init);//これいれた
 
 var resolution = new THREE.Vector2( window.innerWidth, window.innerHeight );
 
-var geo = [];
-var meshes = {};//planeけしてみた
+// var geo = [];//中で定義でok
+var meshes = {};//これはここじゃないとだめ
 
-var material;
+// var material;//中で定義でok
 
 
 function init() {
 
+	
 	if( !meshes[ 0 ] ) { meshes[ 0 ] = prepareMesh(); }
 
 	render();
@@ -48,7 +49,7 @@ function prepareMesh() {
 	var g = new MeshLine();
 	g.setGeometry( geo, function( p ) { return p; } );//function( p ) { return p; }はgeometryのwidthに関与、materialでlinewidth決めてるから気にしなくていい。
 
-	material = new MeshLineMaterial( {
+	var material = new MeshLineMaterial( {
 
 		color: new THREE.Color( new THREE.Color( colors[ ~~Maf.randomInRange( 0, colors.length ) ] ) ),
 		opacity: 1,
@@ -122,6 +123,7 @@ function checkIntersection(){
 
 
 function check() {
+	
 	for( var i in meshes ) { checkIntersection( i ); }
 	setTimeout( check, 80 );//ここの時間ごとに次の点が打たれて更新される
 }
