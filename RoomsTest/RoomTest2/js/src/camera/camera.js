@@ -15,7 +15,7 @@ export class Camera extends THREE.PerspectiveCamera{
    */
   update() {
     // 原点に注目
-    this.lookAt(new THREE.Vector3(1, 0, 3));
+    this.lookAt(new THREE.Vector3(0, 0, 0));
   }
 }
 

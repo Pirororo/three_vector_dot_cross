@@ -109,8 +109,8 @@ export default class Line extends THREE.Object3D {
 
         }else{
 
-            if(geo[ geo.length - 4 ]>0 && lineLength>0){lineLength *= -1;}
-            if(geo[ geo.length - 4 ]<-200&& lineLength<0){lineLength *= -1;}
+            if(geo[ geo.length - 4 ]>30 && lineLength>0){lineLength *= -1;}
+            if(geo[ geo.length - 4 ]<-30&& lineLength<0){lineLength *= -1;}
             geo[ geo.length - 3 ] = geo[ geo.length - 6 ];
             geo[ geo.length - 2 ] = geo[ geo.length - 5 ];
             geo[ geo.length - 1 ] = geo[ geo.length - 4 ] +lineLength;

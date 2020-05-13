@@ -38,16 +38,16 @@ export class App{
 
     // // マウスとの交差を調べたいものは配列に格納する
     this.meshList = this._scene.meshList;
-    console.log(this.meshList.length);//343個
+    console.log(this.meshList.length);//22個
 
 
     // レイキャストを作成
     this.raycaster = new THREE.Raycaster();
 
 
-    window.addEventListener('mousemove', this.handleMouseMove);
+    // window.addEventListener('mousemove', this.handleMouseMove);
 
-    window.addEventListener('click', this.cameraChange, false);
+    // window.addEventListener('click', this.cameraChange, false);
 
     // フレーム毎の更新
     this._update();
@@ -85,26 +85,26 @@ export class App{
 
 
 
-    // レイキャスト = マウス位置からまっすぐに伸びる光線ベクトルを生成
-    this.raycaster.setFromCamera(this.mouse, this._scene.camera);
+    // // レイキャスト = マウス位置からまっすぐに伸びる光線ベクトルを生成
+    // this.raycaster.setFromCamera(this.mouse, this._scene.camera);
 
-    // その光線とぶつかったオブジェクトを得る
-    const intersects = this.raycaster.intersectObjects(this.meshList);
-    console.log(intersects.length);//686個→0個
+    // // その光線とぶつかったオブジェクトを得る
+    // const intersects = this.raycaster.intersectObjects(this.meshList);
+    // console.log(intersects.length);
 
 
-    this.meshList.map(mesh => {
-      // 交差しているオブジェクトが1つ以上存在し、
-      // 交差しているオブジェクトの1番目(最前面)のものだったら
-      if (intersects.length > 0 && mesh === intersects[0].object) {
-        mesh.material.transparent = true;
-        mesh.material.opacity = 0.8;
-        console.log("okMeshIf");
-      } else {
-        mesh.material.transparent = true;
-        mesh.material.opacity = 0.4;
-      }
-    });
+    // this.meshList.map(mesh => {
+    //   // 交差しているオブジェクトが1つ以上存在し、
+    //   // 交差しているオブジェクトの1番目(最前面)のものだったら
+    //   if (intersects.length > 0 && mesh === intersects[0].object) {
+    //     mesh.material.transparent = true;
+    //     mesh.material.opacity = 0.8;
+    //     console.log("okMeshIf");
+    //   } else {
+    //     mesh.material.transparent = true;
+    //     mesh.material.opacity = 0.4;
+    //   }
+    // });
 
   }
 
@@ -161,9 +161,10 @@ export class App{
       });
 
     }else{
+
       this.camSwitch = "mainCam";
     }
-
+  
   }
 
   /**
