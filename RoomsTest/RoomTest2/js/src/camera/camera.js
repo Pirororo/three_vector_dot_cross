@@ -6,7 +6,8 @@ export class Camera extends THREE.PerspectiveCamera{
    * @constructor
    */
   constructor() {
-    super(45, window.innerWidth / window.innerHeight, 10, 500);
+    // super(45, window.innerWidth / window.innerHeight, 10, 500);
+    super(45, window.innerWidth / window.innerHeight, 1,  1000);
     // this.lookAt(new THREE.Vector3(0, 0, 0));
   }
 

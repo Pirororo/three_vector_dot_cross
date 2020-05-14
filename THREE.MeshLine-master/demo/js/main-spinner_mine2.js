@@ -7,7 +7,8 @@ var camera = new THREE.PerspectiveCamera( 80, window.innerWidth / window.innerHe
 camera.position.z = -50;
 camera.lookAt( scene.position );
 
-var renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true });
+var renderer = new THREE.WebGLRenderer( { antialias: false, alpha: true });
+renderer.setClearColor(new THREE.Color(0x000000));
 renderer.setSize( window.innerWidth, window.innerHeight );
 renderer.setPixelRatio( window.devicePixelRatio );
 container.appendChild( renderer.domElement );
@@ -51,7 +52,8 @@ function prepareMesh() {
 
 	var material = new MeshLineMaterial( {
 
-		color: new THREE.Color( new THREE.Color( colors[ ~~Maf.randomInRange( 0, colors.length ) ] ) ),
+		// color: new THREE.Color( new THREE.Color( colors[ ~~Maf.randomInRange( 0, colors.length ) ] ) ),
+		color: 0x70c1b3,
 		opacity: 1,
 		lineWidth: 0.3,
 		// depthTest: false,

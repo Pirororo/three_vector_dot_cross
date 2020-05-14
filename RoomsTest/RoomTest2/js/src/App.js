@@ -1,4 +1,5 @@
 // import * as THREE from '../libs/three.module.js';
+
 /**
  * メインアプリクラスです。
  */
@@ -14,21 +15,33 @@ export class App{
     // this.cameraChange = this.cameraChange.bind(this);
     // this.handleMouseMove = this.handleMouseMove.bind(this);
     this._resize = this._resize.bind(this);
+    this._initStats = this._initStats.bind(this);
 
 
-    // マウス座標管理用のベクトルを作成
-    this.mouse = new THREE.Vector2();
+
+    //fps表示
+    this._stats = this._initStats();
+    
+    // // マウス座標管理用のベクトルを作成
+    // this.mouse = new THREE.Vector2();
     
     // シーン
     this._scene = sceneInstance;
 
+    //カメラ
+    this.orbitControls = new THREE.OrbitControls(this._scene.camera);
+    this.orbitControls.autoRotate = false;
+    // this.orbitControls.enableDamping = true;
+    // this.orbitControls.dampingFactor = 0.2;
+    // this.clock = new THREE.Clock();
+
     //レンダラー
-    this._renderer = new THREE.WebGLRenderer();
+    this._renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     this._renderer.setClearColor(new THREE.Color(0x000000));//もとはこっち
     this._renderer.setSize(window.innerWidth, window.innerHeight);
     this._renderer.setPixelRatio(1);
-    this._renderer.shadowMap.enabled = true;
-    
+    // this._renderer.shadowMap.enabled = true;
+
 
     // DOMを追加////あとで簡略化する！順番も
     this._wrapper = document.getElementById('WebGL-output');
@@ -51,32 +64,72 @@ export class App{
 
 
     // シェーダー
+    //レンダーパス
+    var renderPass1 = new THREE.RenderPass(this._scene.scene1, this._scene.camera);
+    renderPass1.clear = true;//Lineは線が更新されていくのでtrueにする、falseだと線最初から全部のこっちゃう
+    var renderPass2 = new THREE.RenderPass(this._scene.scene2, this._scene.camera);
+    renderPass2.clear = false;//trueで色がでる
+    //**********renderPass両方falseだとopasity0みたいに明るくなりすぎる、ライト二重？ */
+    
+    //マスクパス、クリアマスクパス
+    let scene1Mask = new THREE.MaskPass(this._scene.scene1, this._scene.camera);
+    let scene2Mask = new THREE.MaskPass(this._scene.scene2, this._scene.camera);
+    let clearMask = new THREE.ClearMaskPass();
+    
+    //エフェクトパス
     var colorify = new THREE.ShaderPass(THREE.ColorifyGradientShader);
-    colorify.uniforms.color.value = new THREE.Color(0xc53cff);
+    colorify.uniforms.color.value = new THREE.Color(0xff3c47);
     colorify.uniforms.color2.value = new THREE.Color(0x00ffd1);
     // colorify.enabled = false;
     colorify.enabled = true;
 
+    var FXAAShader = new THREE.ShaderPass(THREE.FXAAShader);
+    FXAAShader.enabled = true;
+    FXAAShader.uniforms.resolution.value = new THREE.Vector2(1 / window.innerWidth, 1 / window.innerHeight);
 
-    var renderPass = new THREE.RenderPass(this._scene, this._scene.camera);//レンダー
+    //コピーパス
     var effectCopy = new THREE.ShaderPass(THREE.CopyShader);//コピー
     effectCopy.renderToScreen = true;
 
-    this.composer = new THREE.EffectComposer(this._renderer);//コンポーズ
+    //グリッチパス
+    var effectGlitch = new THREE.GlitchPass(32);
+    effectGlitch.renderToScreen = true;
+    effectGlitch.randX = THREE.Math.randInt( 120, 60 );
 
-    //コンポーザーの配列
-    this.composer.addPass(renderPass);
-    this.composer.addPass(colorify);
-    this.composer.addPass(effectCopy);
+
+    //コンポーザーの定義
+    this.composer = new THREE.EffectComposer(this._renderer);
+    this.composer.renderTarget1.stencilBuffer = true;//?
+    this.composer.renderTarget2.stencilBuffer = true;//?
+
+    //コンポーザーに入れていく
+    this.composer.addPass(renderPass1);//Scene1(Line)のレンダー
+    this.composer.addPass(renderPass2);//Scene2(Plate)のレンダー
+
+    this.composer.addPass(FXAAShader);
+    this.composer.addPass(colorify);//Scene2(Plate)のマスクのエフェクト
+
+    // this.composer.addPass(scene1Mask);//Scene2(Plate)のマスクここから
+    // this.composer.addPass(FXAAShader);
+    // this.composer.addPass(clearMask);//Scene2(Plate)のマスクここから
+
+    // this.composer.addPass(scene2Mask);//Scene2(Plate)のマスクここから
+    // // this.composer.addPass(FXAAShader);
+    // this.composer.addPass(colorify);//Scene2(Plate)のマスクのエフェクト
+    // this.composer.addPass(clearMask);//Scene2(Plate)のマスクここから
+
+
+    // this.composer.addPass(effectCopy);
+    this.composer.addPass(effectGlitch);
 
 
     var controls = new function () {
 
-        this.select = 'none';
-        this.color = 0xc53cff;
+        this.select = 'Colorify';
+        this.color = 0xff3c47;
         this.color2 = 0x00ffd1;
 
-        this.rotate = false;
+        // this.rotate = false;
 
         this.changeColor = function () {
             colorify.uniforms.color.value = new THREE.Color(controls.color);
@@ -112,13 +165,14 @@ export class App{
         //         }
         //     }
         // }
+
     };
 
 
     var gui = new dat.GUI();
 
     gui.add(controls, "select", [ "colorify" , 'none']).onChange(controls.switchShader);
-    gui.add(controls, "rotate");
+    // gui.add(controls, "rotate");
 
     var clFolder = gui.addFolder("Colorify");
     clFolder.addColor(controls, "color").onChange(controls.changeColor);
@@ -136,18 +190,31 @@ export class App{
 
 
   /**
-     * フレーム毎の更新をします。
-     */
+  * フレーム毎の更新をします。
+  */
   _update() {
+
+    // ワールド座標を取得
+    const world = this._scene.camera.getWorldPosition();
+    console.log(world);
+
+    this._stats.update();
+
+    // //sphere.rotation.y=step+=0.01;
+    // var delta = this.clock.getDelta();
+    // this.orbitControls.update(delta);
+
+    this._renderer.autoClear = false;//これ大事〜！trueだと色が毎回背景白にクリアされちゃう
 
     // シーンの更新
     this._scene.update();
 
     requestAnimationFrame(this._update);
     this.composer.render();
-    
-    
-    // // 描画
+    // this.composer.render(delta);
+    // this._renderer.render(this._scene.scene1, this._scene.camera);
+
+    // // カメラを切り替え
     // if(this.camSwitch == "mainCam"){
     //   this._renderer.render(this._scene, this._scene.camera);
     // }else if(this.camSwitch == "roomCam"){
@@ -249,5 +316,21 @@ export class App{
     this._scene.camera.aspect = width / height;
     this._scene.camera.updateProjectionMatrix();
   }
+
+  _initStats() {
+
+    this._stats = new Stats();
+    this._stats.setMode(0); // 0: fps, 1: ms
+
+
+    // Align top-left
+    this._stats.domElement.style.position = 'absolute';
+    this._stats.domElement.style.left = '0px';
+    this._stats.domElement.style.top = '0px';
+
+    document.getElementById("Stats-output").appendChild(this._stats.domElement);
+
+    return this._stats;
+}
 
 }
