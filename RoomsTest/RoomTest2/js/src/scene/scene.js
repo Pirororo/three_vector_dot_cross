@@ -104,6 +104,7 @@ export class Scene1 extends THREE.Scene {
 
         super();
 
+
         //ライン
         this._line = new Line();
         this._line.position.set(0,0,0);
@@ -111,20 +112,20 @@ export class Scene1 extends THREE.Scene {
 
         //ライン2
         this._line2 = new Line();
-        this._line2.rotation.x = 180 * Math.PI/180;
-        this._line2.rotation.z = 90 * Math.PI/180;
+        // this._line2.rotation.x = 180 * Math.PI/180;
+        // this._line2.rotation.z = 90 * Math.PI/180;
         this.add(this._line2);
 
         //ライン3
         this._line3 = new Line();
-        this._line3.rotation.x = 90 * Math.PI/180;
-        this._line3.rotation.y = 90 * Math.PI/180;
+        // this._line3.rotation.x = 90 * Math.PI/180;
+        // this._line3.rotation.y = 90 * Math.PI/180;
         this.add(this._line3);
 
         //ライン4
         this._line4 = new Line();
-        this._line4.rotation.z = 180 * Math.PI/180;
-        this._line4.rotation.y = 90 * Math.PI/180;
+        // this._line4.rotation.z = 180 * Math.PI/180;
+        // this._line4.rotation.y = 90 * Math.PI/180;
         this.add(this._line4);
 
         //BOX
@@ -140,7 +141,11 @@ export class Scene1 extends THREE.Scene {
     }
     
     update(){
+
         this._line.update();
+        this._line2.update();
+        this._line3.update();
+        this._line4.update();
     }
 
 }

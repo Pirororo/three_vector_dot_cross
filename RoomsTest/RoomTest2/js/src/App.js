@@ -123,9 +123,9 @@ export class App{
     effectCopy.renderToScreen = true;
 
     //グリッチパス
-    var effectGlitch = new THREE.GlitchPass(32);
+    var effectGlitch = new THREE.GlitchPass(256);
     effectGlitch.renderToScreen = true;
-    effectGlitch.randX = THREE.Math.randInt( 120, 60 );
+    effectGlitch.randX = THREE.Math.randInt( 360, 120 );
 
     
 
@@ -138,11 +138,9 @@ export class App{
     this.composer.addPass(renderPass1);//Scene1(Line)のレンダー
     this.composer.addPass(renderPass2);//Scene2(Plate)のレンダー
 
-    
 
     // this.composer.addPass(FXAAShader);
     this.composer.addPass(colorify);//Scene2(Plate)のマスクのエフェクト
-
 
 
     // this.composer.addPass(scene1Mask);//Scene2(Plate)のマスクここから
