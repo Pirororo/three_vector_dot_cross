@@ -55,7 +55,7 @@ export default class Line extends THREE.Object3D {
             color: 0xffff00,
             // color: new THREE.Color( new THREE.Color( colors[ ~~Maf.randomInRange( 0, colors.length ) ] ) ),
             opacity: 0.8,
-            lineWidth: 1.4,
+            lineWidth: 1.5,
             depthTest: false,//これがないと隠れちゃって描画されなかった。。。
             // blending: THREE.AddBlending,
             transparent: true,
@@ -87,29 +87,29 @@ export default class Line extends THREE.Object3D {
         }
 
         let Randomselect = Math.random();
-        let lineLength = 180 * (Math.random()-0.5) ;
+        let lineLength = 150 * (Math.random()-0.5) ;
 
 
         if(Randomselect >0.66){	
 
-            if(geo[ geo.length - 6 ]>100 && lineLength>0){lineLength *= -1;}
-            if(geo[ geo.length - 6 ]<-100&& lineLength<0){lineLength *= -1;}
+            if(geo[ geo.length - 6 ]>150 && lineLength>0){lineLength *= -1;}
+            if(geo[ geo.length - 6 ]<-150&& lineLength<0){lineLength *= -1;}
             geo[ geo.length - 3 ] = geo[ geo.length - 6 ] +lineLength;
             geo[ geo.length - 2 ] = geo[ geo.length - 5 ];
             geo[ geo.length - 1 ] = geo[ geo.length - 4 ];
 
         }else if(Randomselect >0.33){
 
-            if(geo[ geo.length - 5 ]>100 && lineLength>0){lineLength *= -1;}
-            if(geo[ geo.length - 5 ]<-100&& lineLength<0){lineLength *= -1;}
+            if(geo[ geo.length - 5 ]>150 && lineLength>0){lineLength *= -1;}
+            if(geo[ geo.length - 5 ]<-150&& lineLength<0){lineLength *= -1;}
             geo[ geo.length - 3 ] = geo[ geo.length - 6 ];
             geo[ geo.length - 2 ] = geo[ geo.length - 5 ] +lineLength;
             geo[ geo.length - 1 ] = geo[ geo.length - 4 ];
 
         }else{
 
-            if(geo[ geo.length - 4 ]>100 && lineLength>0){lineLength *= -1;}
-            if(geo[ geo.length - 4 ]<-100&& lineLength<0){lineLength *= -1;}
+            if(geo[ geo.length - 4 ]>150 && lineLength>0){lineLength *= -1;}
+            if(geo[ geo.length - 4 ]<-150&& lineLength<0){lineLength *= -1;}
             geo[ geo.length - 3 ] = geo[ geo.length - 6 ];
             geo[ geo.length - 2 ] = geo[ geo.length - 5 ];
             geo[ geo.length - 1 ] = geo[ geo.length - 4 ] +lineLength;
@@ -122,7 +122,7 @@ export default class Line extends THREE.Object3D {
     update(){
 
         this.frame += 1;
-        if(this.frame% 3 == 0){for( var i in this.meshes ) { this.checkIntersection( i ); }}
+        if(this.frame% 2 == 0){for( var i in this.meshes ) { this.checkIntersection( i ); }}
         
     }
 

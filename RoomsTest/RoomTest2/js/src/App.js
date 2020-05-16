@@ -35,9 +35,28 @@ export class App{
     // this.orbitControls.dampingFactor = 0.2;
     // this.clock = new THREE.Clock();
 
+
+    //Tween
+    this.camPos = {x: 215, y: 315, z: -105};
+    this._scene.camera.position.set(this.camPos.x,this.camPos.y,this.camPos.z);
+    // var rndPos = (2*Math.random()-1)*100;//-100~100
+    // this.camTarget= {x:rndPos, y:rndPos, z:rndPos};
+    this.camTarget= {x:50, y:20, z:-100};
+
+    this.tween = new TWEEN.Tween(this.camPos).to(this.camTarget, 1000).easing(TWEEN.Easing.Elastic.InOut).onUpdate(function(){
+      console.log('update!!!!!!!!!');
+
+      // this._scene.camera.position.x = this.camPos.x;
+      // this._scene.camera.position.y = this.camPos.y;
+      // this._scene.camera.position.z = this.camPos.z;
+    }).delay(1500).start();//tween.start();も省略されてる
+
+
+
     //レンダラー
     this._renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    this._renderer.setClearColor(new THREE.Color(0x000000));//もとはこっち
+    // this._renderer.setClearColor(new THREE.Color(0xffffff));
+    this._renderer.setClearColor(new THREE.Color(0x000000));
     this._renderer.setSize(window.innerWidth, window.innerHeight);
     this._renderer.setPixelRatio(1);
     // this._renderer.shadowMap.enabled = true;
@@ -76,17 +95,29 @@ export class App{
     let scene2Mask = new THREE.MaskPass(this._scene.scene2, this._scene.camera);
     let clearMask = new THREE.ClearMaskPass();
     
-    //エフェクトパス
+    //エフェクトパス（出力パスの前にかく）
+    //グラデパス
     var colorify = new THREE.ShaderPass(THREE.ColorifyGradientShader);
-    colorify.uniforms.color.value = new THREE.Color(0xff3c47);
-    colorify.uniforms.color2.value = new THREE.Color(0x00ffd1);
-    // colorify.enabled = false;
+    colorify.uniforms.color.value = new THREE.Color(0xffbeeb);
+    colorify.uniforms.color2.value = new THREE.Color(0x93d9ff);
+    colorify.uniforms.alpha = 0.8;
     colorify.enabled = true;
-
+    //アンチエイリアスパス
     var FXAAShader = new THREE.ShaderPass(THREE.FXAAShader);
     FXAAShader.enabled = true;
     FXAAShader.uniforms.resolution.value = new THREE.Vector2(1 / window.innerWidth, 1 / window.innerHeight);
+    //ブラーパス
+    var hBlur = new THREE.ShaderPass(THREE.HorizontalBlurShader);
+    hBlur.enabled = true;
+    hBlur.uniforms.h.value = 1 / window.innerHeight;
+    var vBlur = new THREE.ShaderPass(THREE.VerticalBlurShader);
+    vBlur.enabled = true;
+    vBlur.uniforms.v.value = 1 / window.innerWidth;
+    //ブルームパス
+    var bloomPass = new THREE.BloomPass(3, 25, 5.0, 256);
+    bloomPass.enabled = true;
 
+    //出力パス
     //コピーパス
     var effectCopy = new THREE.ShaderPass(THREE.CopyShader);//コピー
     effectCopy.renderToScreen = true;
@@ -96,6 +127,7 @@ export class App{
     effectGlitch.renderToScreen = true;
     effectGlitch.randX = THREE.Math.randInt( 120, 60 );
 
+    
 
     //コンポーザーの定義
     this.composer = new THREE.EffectComposer(this._renderer);
@@ -106,11 +138,16 @@ export class App{
     this.composer.addPass(renderPass1);//Scene1(Line)のレンダー
     this.composer.addPass(renderPass2);//Scene2(Plate)のレンダー
 
-    this.composer.addPass(FXAAShader);
+    
+
+    // this.composer.addPass(FXAAShader);
     this.composer.addPass(colorify);//Scene2(Plate)のマスクのエフェクト
 
+
+
     // this.composer.addPass(scene1Mask);//Scene2(Plate)のマスクここから
-    // this.composer.addPass(FXAAShader);
+    this.composer.addPass(bloomPass);
+    this.composer.addPass(FXAAShader);
     // this.composer.addPass(clearMask);//Scene2(Plate)のマスクここから
 
     // this.composer.addPass(scene2Mask);//Scene2(Plate)のマスクここから
@@ -120,14 +157,26 @@ export class App{
 
 
     // this.composer.addPass(effectCopy);
+
+    // this.composer.addPass(hBlur);
+    // this.composer.addPass(vBlur);
+
     this.composer.addPass(effectGlitch);
 
 
     var controls = new function () {
 
         this.select = 'Colorify';
+
+        //グラデパス
         this.color = 0xff3c47;
         this.color2 = 0x00ffd1;
+
+        //ブルームパス
+        this.strength = 0.1;
+        this.kernelSize = 5;
+        this.sigma = 1.0;
+        this.resolution = 256;
 
         // this.rotate = false;
 
@@ -136,6 +185,14 @@ export class App{
         };
         this.changeColor2 = function () {
             colorify.uniforms.color2.value = new THREE.Color(controls.color2);
+        };
+
+        this.updateEffectBloom = function () {
+            bloomPass.strength = controls.strength, 
+            console.log(bloomPass.strength);
+            bloomPass.kernelSize = controls.kernelSize, 
+            bloomPass.sigma = controls.sigma,
+            bloomPass.resolution = controls.resolution
         };
 
         // this.switchShader = function () {
@@ -171,12 +228,19 @@ export class App{
 
     var gui = new dat.GUI();
 
-    gui.add(controls, "select", [ "colorify" , 'none']).onChange(controls.switchShader);
+    gui.add(controls, "select", [ "colorify" , 'BloomPass']).onChange(controls.switchShader);
     // gui.add(controls, "rotate");
 
     var clFolder = gui.addFolder("Colorify");
     clFolder.addColor(controls, "color").onChange(controls.changeColor);
     clFolder.addColor(controls, "color2").onChange(controls.changeColor2);
+
+    var bpFolder = gui.addFolder("BloomPass");
+    bpFolder.add(controls, "strength", 1, 10).onChange(controls.updateEffectBloom);
+    bpFolder.add(controls, "kernelSize", 1, 100).onChange(controls.updateEffectBloom);
+    bpFolder.add(controls, "sigma", 1, 10).onChange(controls.updateEffectBloom);
+    bpFolder.add(controls, "resolution", 0, 1024).onChange(controls.updateEffectBloom);
+
 
 
     // フレーム毎の更新
@@ -194,13 +258,15 @@ export class App{
   */
   _update() {
 
-    // ワールド座標を取得
-    const world = this._scene.camera.getWorldPosition();
-    console.log(world);
+    // // ワールド座標を取得
+    // const world = this._scene.camera.getWorldPosition();
+    // console.log(world);
 
     this._stats.update();
+    // TWEEN.update();
 
     // //sphere.rotation.y=step+=0.01;
+
     // var delta = this.clock.getDelta();
     // this.orbitControls.update(delta);
 
